@@ -25,7 +25,7 @@ DATABASES = {
         'NAME': 'exam_db',  # Aap apne database ka koi bhi naam yahan de sakte hain
         'CLIENT': {
             'host': os.environ.get('MONGO_URI', 'mongodb+srv://mishrasoumya951_db_user:soumyamishra@cluster0.jbc02ot.mongodb.net/?retryWrites=true&w=majority')
-            'serverSelectionTimeoutMS': 5000,
+           
         }
     }
 }
