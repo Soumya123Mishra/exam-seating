@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+    <h4 class="mb-3">Add Room</h4>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <!-- Room Number -->
+        <input class="form-control mb-3"
+               name="room_no"
+               placeholder="Room Number"
+               required>
+
+        <select class="form-control mb-3" name="seats_per_bench" required>
+            <option value="">Seats per Bench</option>
+            <option value="1">1 (Single Seater)</option>
+            <option value="2" selected>2 (Left-Right Bench)</option>
+        </select>
+        <input class="form-control mb-3"
+       name="total_rows"
+       type="number"
+       placeholder="Total Rows in Classroom"
+       min="1"
+       required>
+
+<input class="form-control mb-3"
+       name="total_columns"
+       type="number"
+       placeholder="Total Columns in Classroom"
+       min="1"
+       required>
+        <!-- Building Name -->
+        <input class="form-control mb-3"
+               name="building_name"
+               placeholder="Building Name"
+               required>
+
+        <!-- Floor Number -->
+        <input class="form-control mb-3"
+               name="floor_number"
+               type="number"
+               placeholder="Floor Number"
+               min="0"
+               required>
+
+        <!-- Room Type -->
+        <select class="form-control mb-3" name="room_type" required>
+            <option value="">Select Room Type</option>
+            <option value="Theory">Theory Room</option>
+            <option value="Lab">Lab</option>
+            <option value="Seminar Hall">Seminar Hall</option>
+            <option value="Conference Room">Conference Room</option>
+        </select>
+
+        <button class="btn btn-success w-100">
+            Save Room
+        </button>
+    </form>
+</div>
+
+<br>
+
+{% if user.is_staff %}
+<a href="{% url 'dashboard' %}" class="btn btn-primary btn-sm">
+    ⬅ Back to Dashboard
+</a>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h4>Add Student</h4>
+
+<form method="post">
+    {% csrf_token %}
+
+    <input class="form-control mb-2" name="roll" placeholder="Roll Number">
+    <input class="form-control mb-2" name="name" placeholder="Student Name">
+    <input class="form-control mb-2" name="course" placeholder="Course">
+    <input class="form-control mb-2" name="year_sem" placeholder="Year/Semester">
+    <input class="form-control mb-2" name="subject" placeholder="Subject">
+    <input class="form-control mb-2" name="dob" placeholder="Date Of Birth">
+
+    <button class="btn btn-primary">Save Student</button>
+</form>
+
+<br>
+
+{% if user.is_staff %}
+<a href="{% url 'dashboard' %}" class="btn btn-primary btn-sm">
+    ⬅ Back to Dashboard
+</a>
+{% endif %}
+{% endblock %}

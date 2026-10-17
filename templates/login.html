@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+    body.login-page {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #6a5acd, #ff1493);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .login-container {
+        background: #fff;
+        padding: 30px;
+        border-radius: 15px;
+        width: 350px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .login-container h2 {
+        margin-bottom: 5px;
+    }
+
+    .login-container p {
+        color: #777;
+        margin-bottom: 20px;
+    }
+
+    .toggle-buttons {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .toggle-buttons button {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        background: #ddd;
+        transition: 0.3s;
+    }
+
+    .toggle-buttons .active-teacher {
+        background: #ff1493;
+        color: #fff;
+    }
+
+    .toggle-buttons .active-student {
+        background: #6a5acd;
+        color: #fff;
+    }
+
+    .input-group {
+        text-align: left;
+        margin-bottom: 15px;
+    }
+
+    .input-group label {
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        margin-top: 5px;
+    }
+
+    .login-btn {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #6a5acd, #ff1493);
+        color: white;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    .msg {
+        color: red;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+</style>
+
+
+</head>
+
+<body class="login-page">
+
+<div class="login-container">
+
+
+<h2>Welcome Back 👋</h2>
+<p>Select your role to login</p>
+
+<!-- Messages -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="msg">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+<!-- Toggle buttons -->
+<div class="toggle-buttons">
+    <button type="button" id="teacherBtn" class="active-teacher" onclick="showTeacher()">Teacher</button>
+    <button type="button" id="studentBtn" onclick="showStudent()">Student</button>
+</div>
+
+<!-- LOGIN FORM -->
+<form method="POST">
+    {% csrf_token %}
+
+    <!-- Hidden role fields -->
+    <input type="hidden" name="teacherForm" id="teacherInput" value="1">
+    <input type="hidden" name="studentForm" id="studentInput" value="">
+
+    <!-- Teacher Fields -->
+    <div id="teacherFields">
+        <div class="input-group">
+            <label>Teacher Username</label>
+            <input type="text" name="username" id="teacherUsername" required>
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" name="password" id="teacherPassword" required>
+        </div>
+    </div>
+
+    <!-- Student Fields -->
+    <div id="studentFields" style="display:none;">
+        <div class="input-group">
+            <label>Roll Number</label>
+            <input type="number" name="username" id="studentUsername" disabled>
+        </div>
+
+        <div class="input-group">
+            <label>DOB (Password)</label>
+            <input type="text" name="password" id="studentPassword" placeholder="dd/mm/yy" disabled>
+        </div>
+    </div>
+
+    <button type="submit" class="login-btn">Login</button>
+</form>
+
+<!-- Register -->
+<p id="registerLink" style="margin-top:10px;">
+    Don't have account? <a href="/register/">Create School Account</a>
+</p>
+
+
+</div>
+
+<script>
+function showTeacher(){
+    document.getElementById("teacherFields").style.display="block";
+    document.getElementById("studentFields").style.display="none";
+
+    document.getElementById("teacherInput").value = "1";
+    document.getElementById("studentInput").value = "";
+
+    document.getElementById("teacherUsername").disabled = false;
+    document.getElementById("teacherPassword").disabled = false;
+
+    document.getElementById("studentUsername").disabled = true;
+    document.getElementById("studentPassword").disabled = true;
+
+    document.getElementById("registerLink").style.display="block";
+}
+
+function showStudent(){
+    document.getElementById("teacherFields").style.display="none";
+    document.getElementById("studentFields").style.display="block";
+
+    document.getElementById("teacherInput").value = "";
+    document.getElementById("studentInput").value = "1";
+
+    document.getElementById("teacherUsername").disabled = true;
+    document.getElementById("teacherPassword").disabled = true;
+
+    document.getElementById("studentUsername").disabled = false;
+    document.getElementById("studentPassword").disabled = false;
+
+    document.getElementById("registerLink").style.display="none";
+}
+</script>
+
+</body>
+</html>
+
+
+</div>
+<script>
+function showTeacher(){
+    document.getElementById("teacherFields").style.display="block";
+    document.getElementById("studentFields").style.display="none";
+
+    document.getElementById("teacherInput").value = "1";
+    document.getElementById("studentInput").value = "";
+
+    // enable teacher
+    document.getElementById("teacherUsername").disabled = false;
+    document.getElementById("teacherPassword").disabled = false;
+
+    // disable student
+    document.getElementById("studentUsername").disabled = true;
+    document.getElementById("studentPassword").disabled = true;
+
+    document.getElementById("registerLink").style.display="block";
+}
+
+function showStudent(){
+    document.getElementById("teacherFields").style.display="none";
+    document.getElementById("studentFields").style.display="block";
+
+    document.getElementById("teacherInput").value = "";
+    document.getElementById("studentInput").value = "1";
+
+    // disable teacher
+    document.getElementById("teacherUsername").disabled = true;
+    document.getElementById("teacherPassword").disabled = true;
+
+    // enable student
+    document.getElementById("studentUsername").disabled = false;
+    document.getElementById("studentPassword").disabled = false;
+
+    document.getElementById("registerLink").style.display="none";
+}
+</script>
+</body>
+</html>

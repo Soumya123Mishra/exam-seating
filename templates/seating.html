@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Seating Arrangement</h3>
+
+    {% if user.is_staff %}
+    <a href="{% url 'download_pdf' %}" class="btn btn-success">
+        ⬇ Download PDF
+    </a>
+    {% endif %}
+</div>
+
+<!-- ALERTS -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-warning shadow-sm">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+<!-- ================= ADMIN VIEW ================= -->
+{% if user.is_staff %}
+
+<form method="get" action="{% url 'view_seating' %}" 
+      class="mb-4 p-3 shadow-sm bg-light rounded">
+
+    <div class="row g-2 align-items-center">
+
+        <div class="col-md-3">
+            <input type="text" name="q" class="form-control"
+                   placeholder="Search by name or roll"
+                   value="{{ request.GET.q }}">
+        </div>
+
+        <div class="col-md-2">
+            <input type="date" name="date" class="form-control"
+                   value="{{ request.GET.date }}">
+        </div>
+
+        <div class="col-md-2">
+            <input type="time" name="start_time" class="form-control"
+                   value="{{ request.GET.start_time }}">
+        </div>
+
+        <div class="col-md-2">
+            <input type="time" name="end_time" class="form-control"
+                   value="{{ request.GET.end_time }}">
+        </div>
+
+        <div class="col-md-2 d-grid">
+            <button type="submit" class="btn btn-primary">
+                Filter
+            </button>
+        </div>
+
+    </div>
+</form>
+
+<div class="table-responsive shadow-sm">
+<table class="table table-bordered table-striped text-center align-middle">
+
+    <thead class="table-dark">
+        <tr>
+            <th>Room</th>
+            <th>Row</th>
+            <th>Column</th>
+            <th>Bench</th>
+            <th>Seat Position</th>
+            <th>Roll</th>
+            <th>Name</th>
+            <th>Subject</th>
+            <th>Course</th>
+            <th>Year/Sem</th>
+            <th>Date</th>
+            <th>Time</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% if seating %}
+
+        {% regroup seating by group as course_list %}
+
+        {% for course in course_list %}
+            <tr class="table-secondary">
+                <td colspan="11"><b>{{ course.grouper }}</b></td>
+            </tr>
+
+            {% for seat in course.list %}
+            <tr>
+                <td>{{ seat.room_no }}</td>
+                <td>{{ seat.row }}</td>
+                <td>{{ seat.column }}</td>
+                <td>
+                    {{ seat.bench_label }} ({{ seat.bench_no }})
+                </td>
+                <td>{{ seat.position }}</td>
+                <td>{{ seat.roll }}</td>
+                <td>{{ seat.name }}</td>
+                <td>{{ seat.subject }}</td>
+                <td>{{ seat.course }}</td>
+                <td>{{ seat.year_sem }}</td>
+                <td>{{ seat.exam_date }}</td>
+                <td>{{ seat.start_time }} - {{ seat.end_time }}</td>
+            </tr>
+            {% endfor %}
+
+        {% endfor %}
+
+    {% else %}
+        <tr>
+            <td colspan="11" class="text-danger text-center">
+                No seating generated
+            </td>
+        </tr>
+    {% endif %}
+
+    </tbody>
+</table>
+</div>
+
+<!-- ================= STUDENT VIEW ================= -->
+{% else %}
+
+    {% if seat %}
+
+    <div style="max-width:700px;margin:auto;border:2px solid #000;padding:25px;background:#fff;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1)">
+
+        <div class="text-center">
+            {% if school_logo %}
+                <img src="/media/{{ school_logo }}" height="70">
+            {% else %}
+                <img src="{% static 'images/logo.jpg' %}" height="70">
+            {% endif %}
+
+            <h4 class="mt-2">{{ school_name }}</h4>
+            <h5 class="text-primary">Admit Card</h5>
+        </div>
+
+        <hr>
+
+        <table class="table table-borderless">
+            <tr><td><b>Name:</b></td><td>{{ seat.name }}</td></tr>
+            <tr><td><b>Roll No:</b></td><td>{{ seat.roll }}</td></tr>
+            <tr><td><b>Course:</b></td><td>{{ seat.course }}</td></tr>
+            <tr><td><b>Year/Sem:</b></td><td>{{ seat.year_sem }}</td></tr>
+            <tr><td><b>Subject:</b></td><td>{{ seat.subject }}</td></tr>
+            <tr><td><b>Exam Date:</b></td><td>{{ seat.exam_date }}</td></tr>
+            <tr><td><b>Exam Time:</b></td><td>{{ seat.display_time }}</td></tr>
+        </table>
+
+        <hr>
+
+        <h5 class="text-center">Seating Details</h5>
+
+        <table class="table table-bordered text-center">
+            <tr class="table-light">
+                <th>Building</th>
+                <th>Floor</th>
+                <th>Room Type</th>
+                <th>Room</th>
+                <th>Row</th>
+                <th>Column</th>
+                <th>Bench</th>
+                <th>Seat Position</th>
+            </tr>
+
+            <tr>
+                <td>{{ seat.building_name }}</td>
+                <td>{{ seat.floor_number }}</td>
+                <td>{{ seat.room_type }}</td>
+                <td>{{ seat.room_no }}</td>
+                <td>{{ seat.row }}</td>
+                <td>{{ seat.column }}</td>
+                 <td>
+                    {{ seat.bench_label }} ({{ seat.bench_no }})
+                </td>
+                <td>{{ seat.position }}</td>
+            </tr>
+        </table>
+
+        <br>
+
+        <div class="d-flex justify-content-between">
+            <div>
+                ___________________<br>
+                Student Signature
+            </div>
+            <div>
+                ___________________<br>
+                Controller of Examination
+            </div>
+        </div>
+
+        <hr>
+
+        <p class="text-center text-muted">
+            Please reach exam hall 30 minutes before exam time.
+        </p>
+
+        <div class="text-center">
+            <button onclick="window.print()" class="btn btn-primary">
+                🖨 Print Admit Card
+            </button>
+        </div>
+
+    </div>
+
+    {% else %}
+        <p class="text-danger text-center">Seat not generated yet.</p>
+    {% endif %}
+
+{% endif %}
+
+<br>
+
+{% if user.is_staff %}
+<a href="{% url 'dashboard' %}" class="btn btn-primary btn-sm">
+    ⬅ Back to Dashboard
+</a>
+{% endif %}
+
+{% endblock %}

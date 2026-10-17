@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+    <h3 class="text-center mb-4">Update Room</h3>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card shadow">
+                <div class="card-body">
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <!-- Room Number -->
+                        <div class="mb-3">
+                            <label class="form-label">Room No</label>
+                            <input type="text" name="room_no" 
+                                   class="form-control"
+                                   value="{{ room.room_no }}" required>
+                        </div>
+
+
+                        <!-- ✅ NEW FIELD: Seats per Bench -->
+                        <div class="mb-3">
+                            <label class="form-label">Seats per Bench</label>
+                            <select name="seats_per_bench" class="form-control" required>
+                                <option value="1" {% if room.seats_per_bench == 1 %}selected{% endif %}>
+                                    1 (Single Seater)
+                                </option>
+                                <option value="2" {% if room.seats_per_bench == 2 %}selected{% endif %}>
+                                    2 (Left-Right Bench)
+                                </option>
+                            </select>
+                        </div>
+                                    <input type="number" name="total_rows"
+                    class="form-control"
+                    value="{{ room.total_rows|default:3 }}"
+                    min="1"
+                    required>
+
+                <input type="number" name="total_columns"
+                    class="form-control"
+                    value="{{ room.total_columns|default:5 }}"
+                    min="1"
+                    required>
+                        <!-- Building Name -->
+                        <div class="mb-3">
+                            <label class="form-label">Building Name</label>
+                            <input type="text" name="building_name"
+                                   class="form-control"
+                                   value="{{ room.building_name }}" required>
+                        </div>
+
+                        <!-- Floor Number -->
+                        <div class="mb-3">
+                            <label class="form-label">Floor Number</label>
+                            <input type="number" name="floor_number"
+                                   class="form-control"
+                                   value="{{ room.floor_number }}" min="0" required>
+                        </div>
+
+                        <!-- Room Type -->
+                        <div class="mb-3">
+                            <label class="form-label">Room Type</label>
+                            <select name="room_type" class="form-control" required>
+                                <option value="Theory" {% if room.room_type == "Theory" %}selected{% endif %}>Theory Room</option>
+                                <option value="Lab" {% if room.room_type == "Lab" %}selected{% endif %}>Lab</option>
+                                <option value="Seminar Hall" {% if room.room_type == "Seminar Hall" %}selected{% endif %}>Seminar Hall</option>
+                                <option value="Conference Room" {% if room.room_type == "Conference Room" %}selected{% endif %}>Conference Room</option>
+                            </select>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success">
+                                Update Room
+                            </button>
+                            <a href="/" class="btn btn-secondary">
+                                Cancel
+                            </a>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

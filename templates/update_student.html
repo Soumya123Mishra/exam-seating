@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+
+    Roll No:
+    <input type="text" name="roll" value="{{ student.roll }}" required><br>
+
+    Name:
+    <input type="text" name="name" value="{{ student.name }}" required><br>
+
+    Course:
+    <input type="text" name="course" value="{{ student.course }}" required><br>
+    
+    Year/Semester:
+    <input type="text" name="year_sem" value="{{ student.year_sem }}" required><br>
+
+    Subject:
+    <input type="text" name="subject" value="{{ student.subject }}" required><br>
+    Date Of Birth:
+    <input type="password" name="dob" value="{{ student.dob }}" required><br>
+
+    <button type="submit">Update Student</button>
+</form>
+{% endblock %}

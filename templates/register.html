@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+</head>
+
+<body class="login-page">
+
+<div class="login-container">
+
+    <h2>Create Account 🏫</h2>
+    <p>Register your school to continue</p>
+
+    <!-- Messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="msg">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="input-group">
+            <label>School Name</label>
+            <input type="text" name="school_name" placeholder="Enter School Name" required>
+        </div>
+
+        <div class="input-group">
+            <label>Username</label>
+            <input type="text" name="username" placeholder="Enter Username" required>
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Enter Password" required>
+        </div>
+
+        <button type="submit" class="login-btn">Create Account</button>
+    </form>
+
+    <div class="login-link">
+        Already have account? <a href="/login/">Login</a>
+    </div>
+
+</div>
+
+</body>
+</html>

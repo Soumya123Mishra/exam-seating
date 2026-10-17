@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<h3 class="mb-4 text-center">Admin Dashboard</h3>
+<div style="background:#fff3cd; padding:10px; border-radius:8px; margin-bottom:15px;">
+    ⚠️ Please update <b>School Name & Logo</b> from Settings before generating admit cards.
+</div>
+<div class="container">
+<div class="row g-4">
+
+    <!-- Students Card -->
+    <div class="col-md-4">
+        <div class="card text-bg-primary shadow">
+            <div class="card-body">
+
+                <h5 class="text-center">Total Students: {{ total_students }}</h5>
+                <h4 class="text-center mt-3">Students List</h4>
+
+                <div class="table-responsive">
+                <table class="table table-bordered table-striped mt-3">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Roll No</th>
+                            <th>Course</th>
+                             <th>Year/Semester</th>
+                            <th>Subject</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for s in students %}
+                        <tr>
+                            <td>{{ s.name }}</td>
+                            <td>{{ s.roll }}</td>
+                            <td>{{ s.course }}</td>
+                            <td>{{ s.year_sem }}</td>
+                            <td>{{ s.subject }}</td>
+                           
+                            <td>
+                                <a href="{% url 'update_student' s.id %}" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="{% url 'delete_student' s.id %}" class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Are you sure?')">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Rooms Card -->
+    <div class="col-md-4">
+        <div class="card text-bg-success shadow">
+            <div class="card-body">
+
+                <h4 class="text-center">Rooms List</h4>
+
+                <div class="table-responsive">
+                <table class="table table-bordered table-striped mt-3">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Room No</th>
+                            <th>Capacity</th>
+                            <th>Seats/Bench</th>
+                            <th>Building Name</th>
+                            <th>Floor Number</th>
+                            <th>Room Type</th>
+                            <th>Action</th>
+                            
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for r in rooms %}
+                        <tr>
+                            <td>{{ r.room_no }}</td>
+                            <td>{{ r.capacity }}</td>
+                                                        <td>
+                                {% if r.seats_per_bench == 1 %}
+                                    {{ r.capacity }} seats( 1 Seater Bench)
+                                {% elif r.seats_per_bench == 2 %}
+                                     {{ r.capacity }} seats(2 Seater Bench)
+                                {% else %}
+                                   {{ r.capacity }} seats({{ r.seats_per_bench }} Seater )
+                                {% endif %}
+                            </td>
+                            <td>{{ r.building_name }}</td>
+                            <td>{{ r.floor_number }}</td>
+                            <td>{{ r.room_type }}</td>
+
+                            <td>
+                                <a href="{% url 'update_room' r.id %}" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="{% url 'delete_room' r.id %}" class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Are you sure?')">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+ <!-- Generate Seating -->
+
+<div class="col-md-4">
+    <div class="card text-bg-warning shadow">
+        <div class="card-body">
+
+        <h5 class="text-center mb-3">Generate Seating</h5>
+
+        <form method="post" action="{% url 'generate' %}">
+            {% csrf_token %}
+<div class="mb-2">
+    <label class="form-label">Building Name</label>
+
+    {% regroup rooms by building_name as building_list %}
+
+    <div style="max-height:120px; overflow-y:auto; border:1px solid #ccc; padding:8px; border-radius:6px;">
+        {% for b in building_list %}
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox"
+                       name="building[]" value="{{ b.grouper }}">
+                <label class="form-check-label">
+                    {{ b.grouper }}
+                </label>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="mb-2">
+    <label class="form-label">Floor Number</label>
+
+    {% regroup rooms by floor_number as floor_list %}
+
+    <div style="max-height:120px; overflow-y:auto; border:1px solid #ccc; padding:8px; border-radius:6px;">
+        {% for f in floor_list %}
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox"
+                       name="floor[]" value="{{ f.grouper }}">
+                <label class="form-check-label">
+                    Floor {{ f.grouper }}
+                </label>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+            <div class="mb-2">
+    <label class="form-label">Room Type</label>
+
+    {% regroup rooms by room_type as type_list %}
+
+    <div style="max-height:120px; overflow-y:auto; border:1px solid #ccc; padding:8px; border-radius:6px;">
+        {% for t in type_list %}
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox"
+                       name="room_type[]" value="{{ t.grouper }}">
+                <label class="form-check-label">
+                    {{ t.grouper }}
+                </label>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+            <!-- Exam Date -->
+            <div class="mb-2">
+                <label class="form-label">Exam Date</label>
+                <input type="date" name="date" class="form-control" required>
+            </div>
+
+            <!-- Start Time -->
+<div class="mb-2">
+    <label class="form-label">Start Time</label>
+
+    <div class="d-flex gap-2">
+        <input type="time" name="start_time" class="form-control" required>
+
+        <select name="start_ampm" class="form-select" style="max-width:90px;">
+            <option value="AM">AM</option>
+            <option value="PM">PM</option>
+        </select>
+    </div>
+</div>
+
+<!-- End Time -->
+<div class="mb-2">
+    <label class="form-label">End Time</label>
+
+    <div class="d-flex gap-2">
+        <input type="time" name="end_time" class="form-control" required>
+
+        <select name="end_ampm" class="form-select" style="max-width:90px;">
+            <option value="AM">AM</option>
+            <option value="PM">PM</option>
+        </select>
+    </div>
+</div>
+           <p style="color:red; font-size:14px;">
+            ⚠️ Make sure school details are updated in Settings.
+            </p>
+            <button type="submit" class="btn btn-dark w-100 mt-2">
+                Generate Seating
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+
+</div>
+</div>
+
+{% endblock %}

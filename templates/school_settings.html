@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>School Settings</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <label>School Name:</label><br>
+    <input type="text" name="school_name"
+           value="{{ school.name }}"
+           style="padding:8px;width:300px;"><br><br>
+
+    <label>Upload Logo:</label><br>
+    <input type="file" name="logo"><br><br>
+
+    <button type="submit" class="btn btn-success">Save</button>
+</form>
+
+<br>
+
+{% if school.logo %}
+<img src="/media/{{ school.logo }}" height="80">
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+{% endif %}
+<br>
+ {% if user.is_staff %}
+        <a href="{% url 'dashboard' %}" class="btn btn-primary btn-sm">
+            ⬅ Back to Dashboard
+        </a>
+ {% endif %}
+{% endblock %}
