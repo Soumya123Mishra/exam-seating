@@ -16,3 +16,4 @@ pandas
 numpy
 openpyxl
 pillow
+fpdf2
