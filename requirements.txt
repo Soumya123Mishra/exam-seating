@@ -1,5 +1,5 @@
 Django>=4.2
-django-mongodb-backend==6.1.0
+django-mongodb-backend==5.2.4
 gunicorn==22.0.0
 whitenoise==6.7.0
 reportlab==4.2.0
