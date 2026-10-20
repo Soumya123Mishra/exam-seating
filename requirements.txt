@@ -18,7 +18,7 @@ gunicorn==26.2.0
 idna==3.20
 numpy==2.2.1
 openpyxl==3.1.5
-pandas==3.0.6
+pandas==2.2.3
 pillow==12.3.0
 platformdirs==4.11.8
 pymongo==4.19.0
