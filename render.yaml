@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: exam-seating-system
+    runtime: python
+    region: frankfurt
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn seating.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+      - key: MONGODB_URI
+        sync: false
