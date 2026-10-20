@@ -8,7 +8,7 @@ Django==5.1.5
 django-cloudinary-storage==0.3.0
 django-crispy-forms==2.4
 django-filter==25.1
-django-mongodb-backend==6.1.0
+django-mongodb-backend==5.2.4
 django-tables2==2.7.5
 dnspython==2.9.0
 et_xmlfile==2.0.0
