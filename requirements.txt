@@ -16,3 +16,4 @@ django-crispy-forms
 django-filter
 django-tables2
 requests
+fpdf2
