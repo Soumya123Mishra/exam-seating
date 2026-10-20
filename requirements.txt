@@ -29,7 +29,7 @@ pymongo==4.19.0
 python-dateutil==2.9.0.post0
 python-discovery==1.6.0
 pytz==2026.3.post1
-pywin32==312
+
 requests==2.34.2
 setuptools==84.0.0
 six==1.17.0
