@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 
 client = MongoClient("mongodb://localhost:27017")
-db = client["exam_seating_db"]
+db = client["exam_db"]
 
 admin_col = db["admin"]
 students_col = db["students"]

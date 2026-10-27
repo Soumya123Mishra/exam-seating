@@ -16,19 +16,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'exam123'
 DEBUG = True
-ALLOWED_HOSTS=['*']
+ALLOWED_HOSTS = ['*']
 
-
+# Database configuration updated to pure SQLite3
 DATABASES = {
     'default': {
-        'ENGINE': 'django_mongodb_backend',
-        'NAME': 'exam_db',  # Aap apne database ka koi bhi naam yahan de sakte hain
-        'CLIENT': {
-            'host': os.environ.get('MONGO_URI', 'mongodb+srv://mishrasoumya951_db_user:soumyamishra@cluster0.jbc02ot.mongodb.net/?retryWrites=true&w=majority')
-           
-        }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,10 +34,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'myapp',
-    SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 ]
 
 ROOT_URLCONF = 'seating.urls'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -56,15 +53,15 @@ TEMPLATES = [
         },
     },
 ]
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MIDDLEWARE = [
-    'seating.middleware.ForcePrintExceptionMiddleware',
     'django.middleware.security.SecurityMiddleware',
-     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -78,7 +75,7 @@ LOGOUT_REDIRECT_URL = '/login/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-DEFAULT_AUTO_FIELD = 'django_mongodb_backend.fields.ObjectIdAutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGGING = {
     'version': 1,
@@ -97,6 +94,7 @@ LOGGING = {
         },
     },
 }
+
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 CACHES = {
     'default': {
